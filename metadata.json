@@ -1,0 +1,7 @@
+{
+  "name": "Virtual Hairstyle AI Ver 1.1",
+  "description": "An AI-powered application that analyzes your face shape from a selfie, recommends the most flattering hairstyles, and visualizes them on your photo in real-time.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
