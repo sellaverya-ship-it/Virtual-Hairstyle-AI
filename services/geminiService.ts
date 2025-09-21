@@ -88,28 +88,34 @@ export const generateHairstyleImage = async (imageBase64: string, mimeType: stri
     const imagePart = fileToGenerativePart(imageBase64, mimeType);
     
     const preferenceDefinitions = {
-        "Rapikan": "Hanya trim ringan. Buat rambut terlihat lebih rapi dan sehat, hilangkan ujung bercabang, tetapi pertahankan panjang umum yang sama atau sedikit lebih pendek.",
-        "Sedang": "Potongan sedang yang terlihat. Kurangi panjang rambut secara signifikan, tetapi jangan membuatnya menjadi potongan yang sangat pendek. Perubahannya harus jelas.",
-        "Pendek": "Transformasi besar menjadi potongan pendek. Ubah gaya rambut menjadi versi yang jauh lebih pendek dari aslinya (misalnya, dari panjang menjadi bob, atau dari sebahu menjadi pixie)."
+        "Sedang": "Potongan sedang yang terlihat. Kurangi panjang rambut secara signifikan, tetapi jangan membuatnya menjadi potongan yang sangat pendek. Perubahannya harus jelas dan nyata.",
+        "Pendek": "Transformasi besar menjadi potongan pendek. Ubah gaya rambut menjadi versi yang jauh lebih pendek dari aslinya (misalnya, dari panjang menjadi bob, atau dari sebahu menjadi pixie).",
+        "Super Pendek": "Transformasi ekstrem menjadi potongan yang sangat pendek dan berani. Ini adalah opsi terpendek. Pikirkan potongan pixie, undercut, atau bob yang sangat pendek, terlepas dari panjang aslinya. Perubahannya harus sangat dramatis."
     };
 
-    const prompt = `Anda adalah seorang penata rambut virtual ahli yang berspesialisasi dalam simulasi potong rambut. Tugas Anda adalah menunjukkan bagaimana penampilan seseorang dengan gaya rambut BARU berdasarkan preferensi potongan mereka.
+    const prompt = `Anda adalah editor foto ahli dengan satu tugas spesifik: memodifikasi rambut seseorang dalam foto agar lebih pendek, sesuai dengan tingkat potongan yang diminta.
 
-**INPUT:**
-1.  **Gaya yang Diminta:** '${hairstyleName}'
-2.  **Panjang Rambut Asli:** '${originalHairLength}'
-3.  **Tingkat Potongan yang Diinginkan:** '${haircutPreference}'
+**PERINTAH UTAMA (TIDAK BISA DITAWAR):**
+Anda HARUS mengubah rambut di foto agar secara visual cocok dengan deskripsi tingkat potongan ini:
+- **Tingkat Potongan:** '${haircutPreference}'
+- **Definisi:** '${preferenceDefinitions[haircutPreference]}'
+Ini adalah tujuan utama Anda. Panjang rambut di hasil akhir WAJIB sesuai dengan definisi ini.
 
-**DEFINISI TINGKAT POTONGAN:**
-*   **Rapikan:** ${preferenceDefinitions["Rapikan"]}
-*   **Sedang:** ${preferenceDefinitions["Sedang"]}
-*   **Pendek:** ${preferenceDefinitions["Pendek"]}
+**INSPIRASI GAYA (SEKUNDER):**
+Setelah Anda memastikan panjangnya benar, gunakan nama gaya rambut berikut sebagai INSPIRASI untuk tekstur dan bentuk potongan:
+- **Inspirasi Gaya:** '${hairstyleName}'
 
-**ATURAN KRITIS ANDA:**
-1.  **PATUHI TINGKAT POTONGAN:** Prioritas utama Anda adalah menerapkan tingkat potongan '${haircutPreference}'. Hasil akhir HARUS secara akurat mencerminkan definisi di atas.
-2.  **SESUAIKAN GAYA:** Terapkan gaya '${hairstyleName}', tetapi modifikasi agar sesuai dengan aturan #1. Misalnya, jika gaya yang diminta adalah 'Layer Panjang' tetapi tingkat potongannya adalah 'Pendek', Anda harus membuat 'Bob Berlayer' atau gaya pendek lain yang terinspirasi dari permintaan asli.
-3.  **HANYA UBAH RAMBUT:** Jaga agar wajah, ekspresi, pakaian, latar belakang, dan pencahayaan tetap SAMA PERSIS dengan gambar asli.
-4.  **REALISTIS:** Hasilnya harus terlihat seperti foto asli yang diedit, bukan gambar buatan AI.`;
+**CONTOH LOGIKA & ATURAN TEGAS:**
+- JIKA Tingkat Potongan adalah 'Pendek' DAN Inspirasi adalah 'Gelombang Pantai Panjang', maka hasil Anda HARUS berupa gaya rambut PENDEK (seperti bob atau pixie) yang memiliki tekstur bergelombang. JANGAN membuat rambut panjang.
+- JIKA Tingkat Potongan adalah 'Sedang' DAN Inspirasi adalah 'Potongan Pixie', dan rambut asli sudah pendek, maka Anda harus memotongnya sedikit lebih pendek lagi sesuai definisi 'Sedang'. JANGAN memanjangkannya.
+- Prioritaskan selalu Tingkat Potongan di atas Inspirasi Gaya.
+
+**LARANGAN:**
+- JANGAN mengubah apa pun selain rambut (wajah, ekspresi, pakaian, latar belakang, pencahayaan harus identik).
+- JANGAN mengabaikan 'Tingkat Potongan'. Ini adalah kegagalan tugas.
+- JANGAN membuat hasil yang terlihat seperti gambar AI; harus fotorealistis.
+
+Terapkan perubahan ini sekarang pada gambar yang diberikan.`;
 
     try {
         const response: GenerateContentResponse = await ai.models.generateContent({

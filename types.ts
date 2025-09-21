@@ -21,4 +21,4 @@ export interface AnalysisResult {
   hairstyles: HairstyleSuggestion[];
 }
 
-export type HaircutPreference = "Rapikan" | "Sedang" | "Pendek";
+export type HaircutPreference = "Sedang" | "Pendek" | "Super Pendek";

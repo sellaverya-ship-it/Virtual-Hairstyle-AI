@@ -89,9 +89,9 @@ const CameraCapture: React.FC<{ onCapture: (file: File) => void; onCancel: () =>
 };
 
 const haircutPreferences: { value: HaircutPreference; label: string }[] = [
-    { value: "Rapikan", label: "Rapikan Saja" },
     { value: "Sedang", label: "Potongan Sedang" },
     { value: "Pendek", label: "Potongan Pendek" },
+    { value: "Super Pendek", label: "Potongan Super Pendek" },
 ];
 
 interface GeneratedImageState {
@@ -307,6 +307,7 @@ export default function App() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto">
                 {analysisResult?.hairstyles.map((style) => {
                     const result = generatedImages[style.name];
+                    const preferenceLabel = haircutPreferences.find(p => p.value === haircutPreference)?.label || haircutPreference;
                     return (
                         <div key={style.name} className="flex flex-col p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
                             <div className="w-full aspect-square bg-gray-100 rounded-md overflow-hidden flex items-center justify-center mb-3">
@@ -320,6 +321,7 @@ export default function App() {
                                 {result?.url && <img src={result.url} alt={`Generated: ${style.name}`} className="w-full h-full object-cover"/>}
                             </div>
                             <p className="font-bold text-gray-800">{style.name}</p>
+                            <p className="text-sm font-semibold text-pink-500 mb-1">{preferenceLabel}</p>
                             <p className="text-sm text-gray-600 mt-1 flex-grow">{style.description}</p>
                         </div>
                     );
